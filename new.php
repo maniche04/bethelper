@@ -6,31 +6,31 @@ $home = array();
 $away = array();
 $time = array();
 $date = array();
+$scoreh = array();
+$scorea = array();
 
 $html->load_file('http://www.livescores.com/soccer/england/premier-league/results/30-days/');
 foreach ($html->find('table.league-table tr') as $e) {
     foreach ($e->find('th') as $th) {
         foreach ($th->find('span.date') as $date) {
-            $newdate = $date->plaintext;
+            $newdate = $date;
         }
     }
     foreach ($e->find('td.fd') as $t) {
-        //echo $h->plaintext;
-        echo $newdate . " : ";
-        echo $t->plaintext . " | ";
+        $date[] = $newdate->plaintext;
+        $time[] = $t->plaintext;
     }
     foreach ($e->find('td.fh') as $h) {
-        //echo $h->plaintext;
-        echo $h->plaintext . " ";
+        $home[] = $h->plaintext;
     }
-    
     foreach ($e->find('td.fs') as $s) {
-        //echo $h->plaintext;
-        echo $s->plaintext . " ";
+        $score = $s->plaintext;
+        $pos = strpos($score, '-');
+        (int)$scoreh[] = substr($score, 0, ($pos-1));
+        (int)$scorea[] = substr($score, ($pos+1));
     }
     foreach ($e->find('td.fa') as $a) {
-        //echo $a->plaintext;
-        echo $a->plaintext . "<br>";
+        $away[] = $a->plaintext;
     }
 }
 
@@ -38,8 +38,8 @@ $count = count($home);
 
 $i = 0;
 
-//Do {
-//    echo $date[$i] . " : ". $time[$i] . " | " . $home[$i] . " vs " . $away[$i] . "<br>";
-//    $i +=1;
-//} while ($i < $count);;
+Do {
+    echo $date[$i] . " : ". $time[$i] . " | " . $home[$i] . " " . $scoreh[$i] . " | " . $scorea[$i]. " ". $away[$i] . "<br>";
+    $i +=1;
+} while ($i < $count);;
 ?>
